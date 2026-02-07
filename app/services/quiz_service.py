@@ -50,9 +50,7 @@ class QuizService:
         if not state.updated_at:
             return
 
-        # Use UTC for consistency
         now = datetime.now(timezone.utc)
-        # Ensure updated_at is timezone-aware if not already
         last_update = state.updated_at
         if last_update.tzinfo is None:
             last_update = last_update.replace(tzinfo=timezone.utc)
@@ -67,7 +65,6 @@ class QuizService:
         state = await self.get_user_state(user.id)
         
         # Determine difficulty
-        # User floor(current_difficulty) to get question
         current_diff = int(state.current_difficulty)
         
         # Fetch question pool
@@ -87,10 +84,6 @@ class QuizService:
             available_pool = [q for q in all_questions if q.id not in answered_ids]
 
         if not available_pool:
-             # Logic if ALL questions answered? 
-             # Maybe reset or allow re-answering? 
-             # For infinite quiz, we ideally have infinite questions.
-             # MVP: If exhausted, maybe just pick random from all?
              available_pool = question_repo.get_all_questions()
 
         # Select random question from pool
@@ -186,8 +179,6 @@ class QuizService:
             state.max_streak = max(state.max_streak, state.current_streak)
             
             # Increase difficulty
-            # New Formula: (1 / floor(current_difficulty))
-            # Use max(1.0, ...) to avoid division by zero
             current_diff = float(state.current_difficulty) if state.current_difficulty > 0 else 1.0
             increment = (1.0 / int(current_diff))
             state.current_difficulty = min(current_diff + increment, 10.0)
@@ -197,9 +188,6 @@ class QuizService:
             # Penalty based on accuracy
             daily_acc = state.daily_correct / state.daily_attempts if state.daily_attempts > 0 else 0.0
             
-            # Accuracy Multiplier Map for Penalty (mirroring the gain logic or keeping it simple?)
-            # The user didn't specify changing the penalty logic, only the difficulty decrement.
-            # Keeping penalty logic as is: int((1 - daily_acc) * 20)
             penalty = int((1 - daily_acc) * 20)
             
             score_delta = -penalty

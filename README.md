@@ -15,6 +15,12 @@ BrainBolt is a real-time, adaptive quiz platform built with Python FastAPI, Post
 *   **Cache/Leaderboard**: Redis 7
 *   **Infrastructure**: Docker Compose
 
+## Data Model
+*   **Users**: stores basic user info
+*   **UserStates**: stores user state
+*   **UserSubmissions**: stores user submissions
+*   **Questions**: stores questions (for this project have used the questions as a list but for production it will be a database table and we can use redis to cache the questions based on difficulty)
+
 ## Setup & Run
 
 ### Prerequisites
