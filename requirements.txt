@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+redis
+asyncpg
+pydantic
+pydantic-settings
+email-validator
+python-multipart
+structlog
+sqlalchemy
+gunicorn
