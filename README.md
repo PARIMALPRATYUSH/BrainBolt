@@ -21,6 +21,13 @@ BrainBolt is a real-time, adaptive quiz platform built with Python FastAPI, Post
 *   **UserSubmissions**: stores user submissions
 *   **Questions**: stores questions (for this project have used the questions as a list but for production it will be a database table and we can use redis to cache the questions based on difficulty)
 
+## Caching Strategy
+*   **Redis**: Used for implementing consistent and scalable leaderboards and idempotency key for the submissions
+    *   **ZSET**: Used for storing leaderboards
+    *   **String**: Used for storing idempotency key for the submissions
+    *   **Cahche Invalidate**: Used write through cache strategy for leaderboards to keep the cache in consistently sync with the database
+    *   **Future Scope**: We can use redis to cache the questions based on difficulty and also use it to store user states, For questions we can use cache invalidation based on TTL because the question list will rarely change. But for user states we can use cache invalidation based on user submission (write through cache strategy)
+
 ## Setup & Run
 
 ### Prerequisites
